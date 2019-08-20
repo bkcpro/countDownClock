@@ -2,3 +2,22 @@
   font-family: sans-serif;
   text-align: center;
 }
+
+.input input {
+  margin-right: 20px;
+  width: 60px;
+  border-radius: 5px;
+  border: 1px solid black;
+}
+
+.output span {
+  margin-right: 20px;
+  width: 60px;
+}
+
+.control-buttons button {
+  margin-right: 20px;
+  width: 60px;
+  border: 1px solid black;
+  border-radius: 2px;
+}

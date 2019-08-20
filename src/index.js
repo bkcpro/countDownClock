@@ -1,5 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import bootstrap from "bootstrap";
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 import "./styles.css";
 import { tsImportEqualsDeclaration } from "@babel/types";
@@ -21,7 +23,8 @@ class Counter extends React.Component {
       hours: 0,
       mins: 0,
       secs: 0,
-      isClicked: true
+      isClicked: true,
+      toggleStart: false
     };
 
     this.intervalHandle;
@@ -29,7 +32,7 @@ class Counter extends React.Component {
 
     this.setTime = this.setTime.bind(this);
     this.startCounter = this.startCounter.bind(this);
-    this.weatherDisabled = this.weatherDisabled.bind(this);
+    this.wetherDisabled = this.wetherDisabled.bind(this);
     this.tick = this.tick.bind(this);
     this.pauseCounter = this.pauseCounter.bind(this);
     this.stopCounter = this.stopCounter.bind(this);
@@ -39,8 +42,8 @@ class Counter extends React.Component {
   // remainingSeconds = 0;
   // secondsCounter = 0;
 
-  weatherDisabled() {
-    return this.state.hours && this.state.mins && this.state.secs;
+  wetherDisabled() {
+    return this.state.hours || this.state.mins || this.state.secs;
   }
 
   setTime(e) {
@@ -85,7 +88,10 @@ class Counter extends React.Component {
   }
 
   startCounter() {
-    this.setState({ isClicked: false });
+    this.setState({
+      isClicked: false,
+      toggleStart: true
+    });
     this.remainingSeconds =
       this.state.hours * 24 + this.state.mins * 60 + this.state.secs;
     this.intervalHandle = setInterval(this.tick, 1000);
@@ -93,6 +99,7 @@ class Counter extends React.Component {
 
   pauseCounter() {
     clearInterval(this.intervalHandle);
+    this.setState({ toggleStart: false });
   }
 
   stopCounter() {
@@ -100,32 +107,35 @@ class Counter extends React.Component {
     this.setState({
       hours: 0,
       mins: 0,
-      secs: 0
+      secs: 0,
+      toggleStart: false
     });
   }
 
   render() {
     return (
-      <div>
-        <div>Input time below:</div>
+      <div className="container main">
+        <div className="row mt-4">Input time below:</div>
 
-        <div>
+        <div className="row mt-4 input">
           <input clocknotation="h" onChange={this.setTime} />
 
           <input clocknotation="m" onChange={this.setTime} />
 
           <input clocknotation="s" onChange={this.setTime} />
+        </div>
 
-          <div>
-            <span>{this.state.hours}</span>
-            <span>{this.state.mins}</span>
-            <span>{this.state.secs}</span>
-          </div>
+        <div className="row mt-4 output">
+          <span>{this.state.hours}</span>
+          <span>{this.state.mins}</span>
+          <span>{this.state.secs}</span>
+        </div>
 
+        <div className="row mt-4 control-buttons">
           <button
             id="startButton"
             onClick={this.startCounter}
-            disabled={!this.weatherDisabled()}
+            disabled={!this.wetherDisabled() || this.state.toggleStart}
           >
             Start!
           </button>
