@@ -51,40 +51,44 @@ class Counter extends React.Component {
     // console.log(clockNotation);
 
     if (clockNotation === "h") {
-      this.setState({ hours: e.target.value });
+      this.setState({ hours: Number(e.target.value) });
     } else if (clockNotation === "m") {
-      this.setState({ mins: e.target.value });
+      this.setState({ mins: Number(e.target.value) });
     } else if (clockNotation === "s") {
-      this.setState({ secs: e.target.value });
+      this.setState({ secs: Number(e.target.value) });
     }
   }
 
   tick() {
-    console.log(this.remainingSeconds);
+    // console.log(this.remainingSeconds);
 
     if (this.remainingSeconds > 0) {
-      this.remainingSeconds = this.remainingSeconds - 1;
-      this.setState({ secs: this.state.secs - 1 });
+      if (!this.state.secs) {
+        // console.log("mins", this.state.mins * 2, this.state.mins + 1 === 1);
 
-      if (!this.state.secs && this.remainingSeconds > 0) {
-        this.setState({
-          mins: this.state.mins - 1,
-          secs: 59
-        });
-        this.secondsCounter = 0;
-        this.minutesCounter++;
+        if (!this.state.mins) {
+          // console.log("hours", this.state.hours);
+          if (this.state.hours) {
+            this.setState({
+              hours: this.state.hours - 1,
+              mins: 59,
+              secs: 59
+            });
+          }
+        } else {
+          this.setState({
+            mins: this.state.mins - 1,
+            secs: 59
+          });
+        }
+      } else {
+        this.setState({ secs: this.state.secs - 1 });
       }
 
-      if (!this.state.mins) {
-        this.setState({
-          hours: this.state.hours - 1,
-          mins: 59
-        });
-        this.minutesCounter = 0;
-      }
-
-      // console.log(this.state.hours, this.state.mins, this.state.secs);
-    } else clearInterval(this.intervalHandle);
+      this.remainingSeconds--;
+    } else {
+      clearInterval(this.intervalHandle);
+    }
   }
 
   startCounter() {
@@ -93,7 +97,7 @@ class Counter extends React.Component {
       toggleStart: true
     });
     this.remainingSeconds =
-      this.state.hours * 24 + this.state.mins * 60 + this.state.secs;
+      this.state.hours * 3600 + this.state.mins * 60 + this.state.secs;
     this.intervalHandle = setInterval(this.tick, 1000);
   }
 
