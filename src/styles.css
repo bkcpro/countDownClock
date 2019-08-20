@@ -13,6 +13,7 @@
 .output span {
   margin-right: 20px;
   width: 60px;
+  text-align: center;
 }
 
 .control-buttons button {
